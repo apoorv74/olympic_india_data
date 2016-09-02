@@ -1,6 +1,4 @@
 
-
-
 # Master URL --------------------------------------------------------------
 url <- 'https://www.rio2016.com/en/india'
 
@@ -68,6 +66,16 @@ details_master <- details_master[!is.na(details_master$name),]
 }
 
 
+# Events Master -----------------------------------------------------------
+events_master <- unique(details_master[,c(4,6)])
+events_master$event_id <- 1:nrow(events_master)
 
-
-
+for(evn in 1:nrow(details_master)){
+url <- events_master$event_url[evn]
+event_details_xpath_1 <- '//*[@id="main"]/div/div[4]/div[2]/div[1]/div/div[1]/section/div/div[2]/table'
+event_details_xpath_2 <- '//*[@id="main"]/div/div[4]/div[2]/div[1]/div/div[1]/section/div/div/table'
+# //*[@id="main"]/div/div[4]/div[2]/div[1]/div[1]/section/div/div/table
+event_details <- url %>% read_html() %>% html_nodes(xpath = '//*[@id="main"]/div/div[4]/div[2]/div[1]/div[1]/section/div/div/table') %>% html_table(fill = T)
+# if(length(event_details) < 1){
+event_details <- url %>% read_html() %>% html_nodes(xpath = event_details_xpath_2) %>% html_table(fill = T)
+}
